@@ -1,0 +1,32 @@
+{
+  "name": "tdd-node",
+  "version": "1.0.0",
+  "description": "테스트주도개발(TDD)로 만드는 node.js API 서버 강의 기반 학습 코드",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dapsu/tdd-node.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dapsu/tdd-node.js/issues"
+  },
+  "homepage": "https://github.com/dapsu/tdd-node.js#readme",
+  "devDependencies": {
+    "mocha": "^10.0.0",
+    "should": "^13.2.3",
+    "supertest": "^6.2.3"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "morgan": "^1.10.0"
+  }
+}
