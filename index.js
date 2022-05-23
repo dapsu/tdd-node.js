@@ -12,7 +12,10 @@ const users = [
 app.use(morgan('dev'));
 
 app.get('/users', function(req, res) {
-    res.json(users);
+    req.query.limit = req.query.limit || 10;        // limit의 값이 없다면 10
+    const limit = parseInt(req.query.limit, 10);      // 리퀘스트의 쿼리스트링에서 limit의 value 담기
+    if (Number.isNaN(limit)) return res.status(400).end();
+    res.json(users.slice(0, limit));
 });
 
 app.listen(3000, function() {
