@@ -28,7 +28,36 @@ describe('GET /users는 ', () => {
         it('limit이 숫자형이 아니면 상태 코드 400 응답', (done) => {
             request(app)
                 .get('/users?limit=two')
+                .expect(400)    // 에러 상태 코드를 작성할 때는 expect 사용
+                .end(done);
+        });
+    });
+});
+
+describe('GET /users/:id는', () => {
+    describe('성공 시', () => {
+        it('id가 1인 유저 객체를 반환한다', (done) => {
+            request(app)
+                .get('/users/1')
+                .end((err, res) => {
+                    res.body.should.have.property('id', 1);     // id 프로퍼티의 값이 1일 때
+                    done();
+                });
+        });
+    });
+
+    describe('실패 시', () => {
+        it('id가 숫자가 아닐 경우 400으로 응답한다', (done) => {
+            request(app)
+                .get('/users/one')
                 .expect(400)
+                .end(done);
+            });
+            
+        it('id로 유저를 찾을 수 없을 경우 404로 응답한다', (done) => {
+            request(app)
+                .get('/users/999')
+                .expect(404)
                 .end(done);
         });
     });
