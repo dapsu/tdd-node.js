@@ -62,3 +62,113 @@ describe('GET /users/:id는', () => {
         });
     });
 });
+
+describe('DELETE /users/:id는', () => {
+    describe('성공 시', () => {
+        it('204를 응답한다', (done) => {
+            request(app)
+                .delete('/users/1')
+                .expect(204)
+                .end(done);
+        });
+    });
+
+    describe('실패 시', () => {
+        it('404를 응답한다', (done) => {
+            request(app)
+                .delete('/users/one')
+                .expect(400)
+                .end(done);
+        });
+    });
+});
+
+describe('POST /users', () => {
+    describe('성공 시', (done) => {
+        let body;
+        // before(): 테스트케이스가 동작하기 전에 미리 실행되는 함수. 코드의 중복성 없애는데 효율적
+        before(done => {
+            request(app)
+                .post('/users')
+                .send({name: '노홍철'})
+                .expect(201)
+                .end((err, res) => {
+                    body = res.body;
+                    done();
+                });
+        })
+        
+        it('생성된 유저 객체를 반환한다', () => {
+            body.should.have.property('id');
+        });
+
+        it('입력한 name을 반환한다', () => {
+            body.should.have.property('name', '노홍철');
+        });
+    });
+
+    describe('실패 시', () => {
+        it('name 파라미터 누락 시 400을 반환한다', (done) => {
+            request(app)
+                .post('/users')
+                .send({})
+                .expect(400)
+                .end(done);
+        });
+        
+        it('name이 중복일 경우 409를 반환한다', (done) => {
+            request(app)
+                .post('/users')
+                .send({name: '노홍철'})
+                .expect(409)
+                .end(done);
+        });
+    });
+});
+
+describe('PUt /users/:id', () => {
+    describe('성공 시', () => {
+        it('변경된 name을 응답한다', (done) => {
+            request(app)
+                .put('/users/4')
+                .send({name: '정형돈'})
+                .end((err, res) => {
+                    res.body.should.have.property('name', '정형돈');
+                    done();
+                });
+            });
+    });
+
+    describe('실패 시', () => {
+        it('정수가 아닌 id일 경우 400 응답', (done) => {
+            request(app)
+                .put('/users/four')
+                .expect(400)
+                .end(done);
+        });
+
+        it('name이 없을 경우 400 응답', (done) => {
+            request(app)
+                .put('/users/2')
+                .send({})
+                .expect(400)
+                .end(done);
+        });
+
+        it('없는 유저일 경우 404 응답', (done) => {
+            request(app)
+                .put('/users/999')
+                .send({name: 'foo'})
+                .expect(404)
+                .end(done);
+        });
+
+        it('이름이 중복일 경우 409 응답', (done) => {
+            request(app)
+                .put('/users/2')
+                .send({name: '정준하'})
+                .expect(409)
+                .end(done);
+        });
+    });
+});
